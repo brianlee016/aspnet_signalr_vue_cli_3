@@ -3,7 +3,12 @@
     <img alt="Vue logo" src="../assets/logo.png">
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <div>
-      <p>Hello dinger</p>
+      <p>Hello</p>
+      <ul>
+        <li v-for="(message, index) in messages">
+          {{message}}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -20,6 +25,7 @@ export default {
     return {
       connection: null,
       hub: null,
+      messages: []
     }
   },
   components: {
@@ -27,9 +33,10 @@ export default {
   },
   created(){
     let connection = $.hubConnection("http://localhost:61053/signalr", { useDefaultPath: false });
-          let hubProxy = connection.createHubProxy('testHub');
+    let hubProxy = connection.createHubProxy('testHub');
       hubProxy.on("helloWorld", (message) => {
         console.log("hello world received!", message);
+        this.messages.push(message);
       });
 
     connection.start()
